@@ -19,7 +19,7 @@ public class ContadorPalabras {
             String linea;
 
             while ((linea = leer.readLine()) != null) {
-                String[] palabras = linea.toLowerCase().split("\\W+"); // Divide por cualquier delimitador no alfabético
+                String[] palabras = linea.toLowerCase().split("\\W+"); 
                 for (String palabra : palabras) {
                     if (!palabra.isEmpty()) {
                         frecuenciaPalabras.put(palabra, frecuenciaPalabras.getOrDefault(palabra, 0) + 1);
