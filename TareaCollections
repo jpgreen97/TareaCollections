@@ -1,0 +1,48 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class ContadorPalabras {
+    public static void main(String[] args) {
+        ContadorPalabras.leerYContar("C:\\Users\\Usuario\\IdeaProjects\\permisosgaslp.csv", "C:\\Users\\Usuario\\Desktop\\PalabrasContadas.csv");
+    }
+
+    public static void leerYContar(String rutaEntrada, String rutaSalida) {
+        Map<String, Integer> frecuenciaPalabras = new HashMap<>();
+
+        try (BufferedReader leer = new BufferedReader(new FileReader(rutaEntrada))) {
+            String linea;
+
+            while ((linea = leer.readLine()) != null) {
+                String[] palabras = linea.toLowerCase().split("\\W+"); // Divide por cualquier delimitador no alfabético
+                for (String palabra : palabras) {
+                    if (!palabra.isEmpty()) {
+                        frecuenciaPalabras.put(palabra, frecuenciaPalabras.getOrDefault(palabra, 0) + 1);
+                    }
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            System.err.println("No se encontró el archivo: " + rutaEntrada);
+            return;
+        } catch (IOException ex) {
+            System.err.println("Error al leer el archivo");
+            return;
+        }
+
+        // Guardar frecuencia de palabras en el archivo
+        try (BufferedWriter escritor = new BufferedWriter(new FileWriter(rutaSalida))) {
+            escritor.write("Palabra,Frecuencia\n");
+            for (Map.Entry<String, Integer> entry : frecuenciaPalabras.entrySet()) {
+                escritor.write(entry.getKey() + "," + entry.getValue() + "\n");
+            }
+            System.out.println("Archivo de salida se creo en: " + rutaSalida);
+        } catch (IOException ex) {
+            System.err.println("Error al escribir el archivo de salida");
+        }
+    }
+}
